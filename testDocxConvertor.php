@@ -62,8 +62,8 @@ $content = array(
         //$docPdf = new PDFDocument();
         //$docPdf->createDocument($content, $pathPdf);
 
-        $lable = new PDFLabel(12);
-        $lable->createLabel($content, 12, 5);
+        $lable = new PDFLabel();
+        $lable->createLabel($content, 12, 20, true);
 
     } catch (Exception $e) {
         exit($e->getMessage() . ' Error code: ' . $e->getCode());
