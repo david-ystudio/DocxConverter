@@ -1,19 +1,18 @@
 <?php
+
 /*
  * Converter
  * 
- * Copyright (c) 2013, David Yilma (david.yilma@dyksoft.cz)
+ * Copyright (c) 2013 David Yilma (david.yilma@dyksoft.cz).
  * The MIT Licence (http://opensource.org/licenses/MIT)
  * 
  */
-
 namespace Converter;
 
-require_once '../fpdf/fpdf.php';
-require_once 'Service.php';
+require_once 'PDFWriter.php';
 
 use Exception;
-use FPDF;
+use Converter\PDFWriter;
 
 /**
  * Class PdfWriter create PDF file from DocxReader array.
@@ -21,14 +20,12 @@ use FPDF;
  * @author David Yilma, 2013
  * @version 0.9
  */
-class PDFWriter extends FPDF {
+class PDFDocument extends PDFWriter {
     
     const PDF_FONT_SIZE = 12;
     
     public function __construct($orientation = 'P', $unit = 'mm', $size = 'A4') {
 
-        $this->FPDF($orientation, $unit, $size);
-        $this->SetFont('times', '', 0);
     }
     
     /**
@@ -38,7 +35,7 @@ class PDFWriter extends FPDF {
      * @return boolean
      * @throws Exception
      */
-    public function createPdf($content, $pathTarget = null) {
+    public function createDocument($content, $pathTarget = null) {
         
         $this->AddPage();
                 
@@ -222,18 +219,7 @@ class PDFWriter extends FPDF {
         
         return $old;
     }
-    
-    /**
-     * Reset position to original coordinate
-     * @param array $old
-     */
-    private function resetPosition($old) {
-
-        if(is_array($old)) {
-            $this->SetXY($old['x'], $old['y']);
-        }
-    }
-    
+       
     /**
      * Set text color
      * @param string $colorHEX
@@ -251,20 +237,5 @@ class PDFWriter extends FPDF {
         
         return $colorRGB;
         
-    }
-    
-    /**
-     * Output PDF file
-     * @param string $pathPDF
-     * @return boolean
-     */
-    private function savePdf($pathPDF = null) {
-        
-        if(isset($pathPDF)) {
-            $this->Output($pathPDF);
-            return true;
-        } else {
-            $this->Output();
-        }
     }
 }

@@ -1,0 +1,3 @@
+Todo imidietly:
+* setting of path for ZIP Archiv
+* interface for converter (easy use in script) - function for DOCXReader and PDFWrite
