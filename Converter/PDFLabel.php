@@ -24,6 +24,7 @@ class PDFLabel extends PDFWriter{
     
     private $fontSize;
     private $col;
+    private $controlPage;
     
     private $yMove;
     private $lableOnPage;
@@ -31,18 +32,19 @@ class PDFLabel extends PDFWriter{
     public function __construct($fontSize = 8, $orientation = 'P', $unit = 'mm', $size = 'A4') {
         parent::__construct();
         
+        $this->AddPage();
+        
         $this->fontSize = $fontSize;
-        $this->col;
+        $this->col = 1;
+        $this->controlPage = false;
     }
 
     public function createLabel($lables, $number = null, $lableOnPage = null) {
         /** @var array Dimension of Lable */
         $dimension = array();
-        $yMove = 0;
         $this->lableOnPage = $lableOnPage;
         $numberLabel = ($number == null) ? count($lables) : $number;
 
-        $this->AddPage();
         //$this->SetCol(4);
         $this->SetFontSize($this->fontSize);
         //$this->SetAutoPageBreak(false, 20);
@@ -53,6 +55,7 @@ class PDFLabel extends PDFWriter{
             $y = 5 + $this->yMove;
             $dimension = ($number == null) ? $this->labelInTime($lables[$lable], 10, $y, 5.5, 5) : $this->labelInTime($lables[0], 10, $y, 5.5, 5);
             //var_dump($dimension);
+    
             if($lable === $this->lableOnPage) {
                 $this->AddPage();
                 $this->resetPosition();
@@ -143,20 +146,26 @@ class PDFLabel extends PDFWriter{
         return $endEdge;
     }
     
-    function SetCol($col) {
+    /*function SetCol($col) {
         // Move position to a column
         $this->col = $col;
         $x = 10 + $col * 100;
         
         $this->SetLeftMargin($x);
         $this->SetX($x);
-    }
+    }*/
 
-    function AcceptPageBreak() {
+    /*function AcceptPageBreak() {
     
-        $this->resetPosition();
-        $this->yMove = 0;
+        if($this->controlPage === false) {
+            $this->resetPosition();
+            $this->yMove = 0;
+            $this->controlPage = true;
+            return true;
+        } else {
+            $this->controlPage = false;
+            return false;
+        }
         
-        return false;
-    }
+    }*/
 }
