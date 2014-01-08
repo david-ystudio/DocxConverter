@@ -22,11 +22,13 @@ use FPDF;
  */
 
 class PDFWriter extends FPDF {
- 
+    
+    const PDF_FONT_SIZE = 12;
+    
     public function __construct($orientation = 'P', $unit = 'mm', $size = 'A4') {
 
         $this->FPDF($orientation, $unit, $size);
-        $this->SetFont('times', '', 0);
+        $this->SetFont('times', '', self::PDF_FONT_SIZE);
     }
     
     public function table($header, $data, $border) {

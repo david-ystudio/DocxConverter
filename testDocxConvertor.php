@@ -1,7 +1,7 @@
 <?php
 require_once 'Converter/DocxReader.php';
-require_once 'Converter/PdfWriter.php';
-require_once 'Converter/PdfLabel.php';
+require_once 'Converter/PDFDocument.php';
+require_once 'Converter/PDFLabel.php';
 
 use Converter\DocxReader;
 use Converter\PDFDocument;
@@ -28,7 +28,7 @@ use Converter\PDFLabel;
         'referencni c.:' => '198612')
     );*/
 
-$content = array(
+/*$content = array(
     array(
         'sender' => array(
             'company' => 'Christupher Robin s.r.o', 
@@ -49,21 +49,23 @@ $content = array(
             'zasilka c.:' => 'L6200000001',
             'referencni c.:' => '198612')
         )
-    );
+    );*/
+    
+$figures = array('../source/fig1.jpg', '../source/fig2.jpg');
     
     try {
         $pathDocx = '../source/level3.docx';
         $pathPdf = '../source/test.pdf';
         
-        //$docx = new DocxReader();
-        //$content = $docx->readWord($pathDocx);
-        ///var_export($content);
+        $docx = new DocxReader();
+        $content = $docx->readWord($pathDocx);
+        //var_export($content);
         
-        //$docPdf = new PDFDocument();
-        //$docPdf->createDocument($content, $pathPdf);
+        $docPdf = new PDFDocument();
+        $docPdf->createDocument($content, $figures, $pathPdf);
 
-        $lable = new PDFLabel();
-        $lable->createLabel($content, 12, 20, true);
+        //$lable = new PDFLabel();
+        //$lable->createLabel($content, 12, 20, true);
 
     } catch (Exception $e) {
         exit($e->getMessage() . ' Error code: ' . $e->getCode());

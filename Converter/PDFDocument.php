@@ -22,10 +22,8 @@ use Converter\PDFWriter;
  */
 class PDFDocument extends PDFWriter {
     
-    const PDF_FONT_SIZE = 12;
-    
     public function __construct($orientation = 'P', $unit = 'mm', $size = 'A4') {
-
+        parent::__construct();
     }
     
     /**
@@ -35,12 +33,16 @@ class PDFDocument extends PDFWriter {
      * @return boolean
      * @throws Exception
      */
-    public function createDocument($content, $pathTarget = null) {
+    public function createDocument($content, $figures = null, $pathTarget = null) {
         
         $this->AddPage();
                 
         foreach($content as $paragraph) {
             $this->paragraph($paragraph, 'times', 2);
+        }
+        
+        if($figures !== null) {
+            $this->figure($figures, 185);
         }
         
         if($this->savePdf($pathTarget)) {
@@ -85,6 +87,14 @@ class PDFDocument extends PDFWriter {
             }
         }
         $this->Ln($lineParagraph);
+    }
+    
+    public function figure($figures, $width) {
+        
+        foreach($figures as $figure) {
+            $this->Image($figure, 12, null, $width);
+            $this->Cell(0, 8, trim($figure, '/.jpg'), 0, 2);
+        }
     }
     
     /**
@@ -218,6 +228,18 @@ class PDFDocument extends PDFWriter {
         $this->SetXY($old['x'] + ($shiftX), $old['y'] + ($shiftY));
         
         return $old;
+    }
+    
+    /**
+     * Reset position to original coordinate
+     * overwrite method
+     * @param array $old
+     */
+    protected function resetPosition($old = null) {
+
+        if(is_array($old)) {
+            $this->SetXY($old['x'], $old['y']);
+        }
     }
        
     /**
